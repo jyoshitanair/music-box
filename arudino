@@ -1,27 +1,31 @@
 unsigned long time = 0; 
-int E4 = 329.63;
-int C4 = 262; 
-int G4 = 392; 
-int D4 = 294; 
+bool finished = true;
+float E4 = 329.63;
+float C4 = 262; 
+float G4 = 392; 
+float D4 = 294; 
 int button1 = 11; 
 int button2 = 12; 
 int buzzer = 10; 
 int i = 0; 
+bool lastb1pressed = false;
+bool lastb2pressed = false;
 bool playSong = false; 
+bool notePlaying = false;
 int qnote = 100; 
 int hnote = qnote*2; 
-int note1[][3] = {
-  {D4,0.2,0.1},
-  {D4,0.2,0.1},
-  {D4,0.2,0.1},
-  {D4,0.2,0.1},
-  {D4,0.2,0.1}};
-int note2[][3] = {
-  {D4,0.2,0.1},
-  {D4,0.2,0.1},
-  {D4,0.2,0.1},
-  {D4,0.2,0.1},
-  {D4,0.2,0.1}};
+float note1[][3] = {
+  {D4,10,0.1},
+  {E4,1,0.1},
+  {C4,1,0.1},
+  {G4,1,0.1},
+  {D4,1,0.1}};
+float note2[][3] = {
+  {D4,10,1.1},
+  {E4,1,0.1},
+  {C4,1,0.1},
+  {G4,1,0.1},
+  {D4,1,0.1}};
 int cursong = 0; 
 void setup() {
   Serial.begin(9600); 
@@ -31,35 +35,56 @@ void setup() {
 }
 
 void loop() {
-  bool b1pressed = digitalRead(button1);
-  bool b2pressed = digitalRead(button2);
-  if (!b1pressed || !b2pressed){
-    Serial.println("Hi!");
+  bool b1pressed = (digitalRead(button1) == LOW);
+  bool b2pressed = (digitalRead(button2) == LOW);
+  if (((b1pressed && !lastb1pressed) || (b2pressed && !lastb2pressed)) && !playSong){
+    Serial.println("button pressed!");
     time = millis();
     cursong = b1pressed? 0:1;
     playSong = true;
     i=0;
+    notePlaying = false;
+    finished = true; 
   }
   if(playSong){
-    if(cursong == 1){
-      play(note1[i]);
+    Serial.println("start!");
+    if(cursong == 0){
+      if(finished){
+        finished = false;
+        play(note1[i]);
+        Serial.println("play 1!");
+      }
     }else{
-      play(note2[i]);
+      if(finished) {
+        finished = false;
+        play(note2[i]);
+        Serial.println("play 2!");
+      }
     }
-    i++;
-    if(i==4){
+    if(i>=5){
+      Serial.println("end!");
       playSong = false;
+      noTone(buzzer);
     }
   }
 }
-void play(int array[]){
-  int note = array[0];
-  int duration = array[1];
-  int pause = array[2];
-  if((millis() - time) >=pause){
-    tone(buzzer,note);
-    if((millis() - time) >= duration){
-      noTone(10);
+void play(float array[]){
+  Serial.println("PLAYING STH");
+  unsigned long note = array[0];
+  unsigned long duration = array[1] * 1000;
+  unsigned long pause = array[2] *1000;
+  if(millis() - time >= (duration+pause)){
+      i++;
+      time = millis();
+      notePlaying = false;
+      finished = true;
     }
+  else if(!notePlaying){
+    tone(buzzer, note);
+    notePlaying = true;
+  }
+  else if((millis() - time >=duration) && notePlaying){
+    noTone(buzzer);
   }
 }
+
