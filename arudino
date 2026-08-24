@@ -1,0 +1,65 @@
+unsigned long time = 0; 
+int E4 = 329.63;
+int C4 = 262; 
+int G4 = 392; 
+int D4 = 294; 
+int button1 = 11; 
+int button2 = 12; 
+int buzzer = 10; 
+int i = 0; 
+bool playSong = false; 
+int qnote = 100; 
+int hnote = qnote*2; 
+int note1[][3] = {
+  {D4,0.2,0.1},
+  {D4,0.2,0.1},
+  {D4,0.2,0.1},
+  {D4,0.2,0.1},
+  {D4,0.2,0.1}};
+int note2[][3] = {
+  {D4,0.2,0.1},
+  {D4,0.2,0.1},
+  {D4,0.2,0.1},
+  {D4,0.2,0.1},
+  {D4,0.2,0.1}};
+int cursong = 0; 
+void setup() {
+  Serial.begin(9600); 
+  pinMode(buzzer, OUTPUT);
+  pinMode(button1, INPUT_PULLUP);
+  pinMode(button2, INPUT_PULLUP);
+}
+
+void loop() {
+  bool b1pressed = digitalRead(button1);
+  bool b2pressed = digitalRead(button2);
+  if (!b1pressed || !b2pressed){
+    Serial.println("Hi!");
+    time = millis();
+    cursong = b1pressed? 0:1;
+    playSong = true;
+    i=0;
+  }
+  if(playSong){
+    if(cursong == 1){
+      play(note1[i]);
+    }else{
+      play(note2[i]);
+    }
+    i++;
+    if(i==4){
+      playSong = false;
+    }
+  }
+}
+void play(int array[]){
+  int note = array[0];
+  int duration = array[1];
+  int pause = array[2];
+  if((millis() - time) >=pause){
+    tone(buzzer,note);
+    if((millis() - time) >= duration){
+      noTone(10);
+    }
+  }
+}
