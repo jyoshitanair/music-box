@@ -1,5 +1,4 @@
 unsigned long time = 0; 
-bool finished = true;
 float E4 = 329.63;
 float C4 = 262; 
 float G4 = 392; 
@@ -15,17 +14,17 @@ bool notePlaying = false;
 int qnote = 100; 
 int hnote = qnote*2; 
 float note1[][3] = {
-  {D4,10,0.1},
-  {E4,1,0.1},
-  {C4,1,0.1},
+  {D4,5,0.1},
+  {E4,4,0.1},
+  {C4,5,0.1},
   {G4,1,0.1},
   {D4,1,0.1}};
 float note2[][3] = {
-  {D4,10,1.1},
-  {E4,1,0.1},
+  {C4,1,1.1},
   {C4,1,0.1},
-  {G4,1,0.1},
-  {D4,1,0.1}};
+  {C4,1,0.1},
+  {C4,1,0.1},
+  {C4,1,0.1}};
 int cursong = 0; 
 void setup() {
   Serial.begin(9600); 
@@ -44,47 +43,48 @@ void loop() {
     playSong = true;
     i=0;
     notePlaying = false;
-    finished = true; 
   }
+  lastb1pressed = b1pressed; 
+  lastb1pressed = b2pressed;
   if(playSong){
     Serial.println("start!");
-    if(cursong == 0){
-      if(finished){
-        finished = false;
-        play(note1[i]);
-        Serial.println("play 1!");
-      }
-    }else{
-      if(finished) {
-        finished = false;
-        play(note2[i]);
-        Serial.println("play 2!");
-      }
-    }
     if(i>=5){
       Serial.println("end!");
       playSong = false;
       noTone(buzzer);
+    }else{
+      if(cursong == 0){
+        play(note1[i]);
+        Serial.println("play 1!");
+      }else{
+        play(note2[i]);
+        Serial.println("play 2!");
+      }
     }
   }
 }
 void play(float array[]){
   Serial.println("PLAYING STH");
-  unsigned long note = array[0];
+  float note = array[0];
+  static unsigned long buttontime = 0; 
   unsigned long duration = array[1] * 1000;
   unsigned long pause = array[2] *1000;
-  if(millis() - time >= (duration+pause)){
-      i++;
-      time = millis();
-      notePlaying = false;
-      finished = true;
-    }
-  else if(!notePlaying){
+  unsigned long totalduartion = duration + pause;
+  if(!notePlaying){
+    buttontime = millis();
+    Serial.println("START PLAYING");
     tone(buzzer, note);
     notePlaying = true;
   }
-  else if((millis() - time >=duration) && notePlaying){
+  else if (notePlaying && (millis() - buttontime >= duration) && (millis() - buttontime < totalduartion)) {
+    Serial.println("STOP PLAYING");
     noTone(buzzer);
   }
-}
-
+  if(millis() - buttontime >= totalduartion){
+    Serial.println("MOVE ON");
+    i++;
+    time = millis();
+    notePlaying = false;
+    buttontime = 0; 
+    }
+  }
