@@ -1,14 +1,21 @@
 unsigned long time = 0;
 unsigned long buttontime = 0; 
 float Aa4 = 440.00; 
+float B3 = 246.94;
+float B5 = 987.77;
+float C4 = 261.63;
+float C5 = 523.25;
+float D4 = 293.66;
+float D5 = 587.33;
+float Dsharp4 = 311.13;
+float Eb4 = 311.13; 
 float E4 = 329.63;
-float C4 = 262; 
-float G4 = 392; 
-float D4 = 294; 
-float B4 = 493.88;
+float F4 = 349.23;
 float Fsharp4 = 369.99;
-float Dsharp4 =  311.13;
-float F4 =  349.23;
+float Bb4 = 932.33;
+float G4 = 392.00;
+float B4 = 493.88;
+float Csharp5 = 554.37;
 int button1 = 11; 
 int button2 = 12; 
 int buzzer = 10; 
@@ -17,26 +24,48 @@ bool lastb1pressed = false;
 bool lastb2pressed = false;
 bool playSong = false; 
 bool notePlaying = false;
-float qnote = 0.5; 
-float enote = qnote*0.5; 
-float hnote = qnote*2;
-float dottedhalfnote = qnote*2.5;  
-//B – E, G, F# – E, B, A, F# – E, G, F#, D#, F, B
+float qnote = 0.2;                 
+float enote = qnote * 0.5;        
+float dqnote = qnote * 1.5;  
+float hnote = qnote * 2.0;        
+float dhalfnote = qnote * 3.0; 
+
 float note1[][3] = {
-  {B4,qnote,0.01},
-  {E4,hnote,0.01},
-  {G4,enote,0.01},
-  {Fsharp4,enote,0.01},
-  {E4,qnote,0.01},
-  {B4,qnote,0.01},
-  {Aa4,qnote,0.01},
-  {Fsharp4,qnote,0.01},
-  {E4,qnote,0.01},
-  {G4,enote,0.01},
-  {Fsharp4,enote,0.01},
-  {Dsharp4,qnote,0.01},
-  {F4,qnote,0.01},
-  {B4,qnote,0.01}};
+  {B3, enote, 0.01},
+  {E4, dqnote, 0.01},
+  {G4, enote, 0.01},
+  {Fsharp4, qnote, 0.01},
+  {E4, hnote, 0.01},
+  {B4, dqnote, 0.01},
+  {Aa4, hnote, 0.3},
+  {Fsharp4, dhalfnote, 0.3},
+  {E4, dqnote, 0.01},
+  {G4, enote, 0.01},
+  {Fsharp4, qnote, 0.01},
+  {D4, hnote, 0.01},
+  {F4, dqnote, 0.01},
+  {B3, hnote, 0.3},
+  {B3, enote, 0.01},
+  {E4, dqnote, 0.01},
+  {G4, enote, 0.01},
+  {Fsharp4, qnote, 0.01},
+  {E4, hnote, 0.01},
+  {B4, dqnote, 0.01},
+  {D5, hnote, 0.01}, 
+  {Csharp5, hnote, 0.01},     
+  {C4, qnote, 0.01},
+  {A4, qnote, 0.01},
+  {C4, qnote, 0.01},
+  {B4, qnote, 0.3},
+  {Bb4, qnote, 0.01},
+  {G4, qnote, 0.01},
+  {E4, qnote, 0.01},
+  {G4, hnote, 0.01},
+  {Fsharp4, dqnote, 0.01},
+  {Dsharp4, hnote, 0.01},
+  {E4, dhalfnote, 0.5}
+};
+
 float note2[][3] = {
   {C4,1,1.1},
   {C4,1,0.1},
