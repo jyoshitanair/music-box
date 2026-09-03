@@ -1,5 +1,11 @@
 unsigned long time = 0;
 unsigned long buttontime = 0; 
+float F3 = 174.61; 
+float Csharp3 = 138.59;
+float D3 = 146.83;
+float Aa3 = 220; 
+float Aa2 = 110;
+float F2 = 87.31; 
 float Aa4 = 440.00; 
 float Aa5 = 880;
 float Gsharp4 = 415.30;
@@ -38,7 +44,9 @@ float qnote = 0.2;
 float enote = qnote * 0.5;        
 float dqnote = qnote * 1.5;  
 float hnote = qnote * 2.0;   
-float dhnote = hnote*1.5;     
+float dhnote = hnote*1.5;  
+float snote = enote*0.5; 
+float tnote = snote*0.8; 
 float dhalfnote = qnote * 3.0; 
 
 float note1[][3] = {
@@ -104,13 +112,66 @@ float note1[][3] = {
   {E4, dhnote, 0.85}
 };
 
-
 float note2[][3] = {
-  {C4,1,1.1},
-  {C4,1,0.1},
-  {C4,1,0.1},
-  {C4,1,0.1},
-  {C4,1,0.1}};
+  {Aa4,qnote,0.4},
+
+  {Aa4,enote,0.1},
+  {Aa4,enote,0.1},
+  {Aa4,enote,0.1},
+  {Aa4,enote,0.1},
+  {Aa4,enote,0.1},
+
+  {Aa4,snote,0.05},
+  {Aa4,snote,0.05},
+  {Aa4,snote,0.05},
+  {Aa4,snote,0.05},
+  {Aa4,snote,0.05},
+  {Aa4,snote,0.05},
+  {Aa4,snote,0.05},
+  {Aa4,snote,0.05},
+  {Aa4,snote,0.05},
+
+  {Aa4,tnote,0.05},
+  {Aa4,tnote,0.05},
+  {Aa4,tnote,0.05},
+  {Aa4,tnote,0.05},
+  
+  {Aa4,enote,0.5},
+
+  {Aa3,hnote,0.2},
+
+  {F4,tnote,0.01},
+
+  {Aa4,hnote,0.2},
+
+  {Aa3,snote,0.01},
+  {B3,snote,0.01},
+  {Csharp3,tnote,0},
+  {D3,hnote*2,0.3},
+
+  {F3,tnote,0.01},
+  {Aa3,hnote,0.3},
+
+  //
+  {A3, hnote*2,0.2},
+
+  {F4,tnote,0.01},
+  {Aa4,hnote,0.3},
+
+
+  {D3,enote,0.01},
+  {Aa3,qnote*2,0.3},
+
+  {Aa3,qnote*2,0.3},
+
+  {F4,snote,0},
+  {Aa4,tnote,0},
+  {Aa4,hnote,0.2},
+
+
+
+};
+  
 int cursong = 0; 
 int arrayLength = sizeof(note1) / sizeof(note1[0]);
 int arrayLength2 = sizeof(note2) / sizeof(note2[0]);
